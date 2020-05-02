@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { catchError, tap } from 'rxjs/operators';
-import { throwError, BehaviorSubject } from 'rxjs';
+import { throwError, BehaviorSubject, Observable } from 'rxjs';
 
 import { User } from './user.model';
 
@@ -21,15 +21,25 @@ export class AuthService {
   user = new BehaviorSubject<User>(null);
   private tokenExpirationTimer: any;
 
+  dummyResponse: AuthResponseData = {
+    kind: 'kind',
+    idToken: 'id_token',
+    email: 'email',
+    refreshToken: 'refresh_token',
+    expiresIn: '10000',
+    localId: 'local_Id',
+    registered: true
+  };
+
   constructor(private http: HttpClient, private router: Router) {}
 
   signup(email: string, password: string) {
     return this.http
       .post<AuthResponseData>(
-        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyDb0xTaRAoxyCgvaDF3kk5VYOsTwB_3o7Y',
+        'login url',
         {
-          email: email,
-          password: password,
+          email,
+          password,
           returnSecureToken: true
         }
       )
@@ -47,12 +57,22 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
-    return this.http
+//this is due to not having a backend server with data
+    this.handleAuthentication(
+      this.dummyResponse.email,
+      this.dummyResponse.localId,
+      this.dummyResponse.idToken,
+      +this.dummyResponse.expiresIn
+    );
+    return Observable.create((obs) => {
+      obs.next(this.dummyResponse);
+    })
+    /* return this.http
       .post<AuthResponseData>(
-        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyDb0xTaRAoxyCgvaDF3kk5VYOsTwB_3o7Y',
+        'login_url',
         {
-          email: email,
-          password: password,
+          email,
+          password,
           returnSecureToken: true
         }
       )
@@ -66,7 +86,7 @@ export class AuthService {
             +resData.expiresIn
           );
         })
-      );
+      ); */
   }
 
   autoLogin() {

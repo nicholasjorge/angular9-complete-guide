@@ -3,18 +3,18 @@ import {
   ViewChild,
   ComponentFactoryResolver,
   OnDestroy,
-} from "@angular/core";
-import { NgForm } from "@angular/forms";
-import { Router } from "@angular/router";
-import { Observable, Subscription } from "rxjs";
+} from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
 
-import { AuthService, AuthResponseData } from "./auth.service";
-import { PlaceholderDirective } from "../shared/placeholder/placeholder.directive";
-import { AlertComponent } from "../shared/alert/alert.component";
+import { AuthService, AuthResponseData } from './auth.service';
+import { PlaceholderDirective } from '../shared/placeholder/placeholder.directive';
+import { AlertComponent } from '../shared/alert/alert.component';
 
 @Component({
-  selector: "app-auth",
-  templateUrl: "./auth.component.html",
+  selector: 'app-auth',
+  templateUrl: './auth.component.html',
 })
 export class AuthComponent implements OnDestroy {
   isLoginMode = true;
@@ -55,7 +55,7 @@ export class AuthComponent implements OnDestroy {
       (resData) => {
         console.log(resData);
         this.isLoading = false;
-        this.router.navigate(["/recipes"]);
+        this.router.navigate(['/recipes']);
       },
       (errorMessage) => {
         console.log(errorMessage);
